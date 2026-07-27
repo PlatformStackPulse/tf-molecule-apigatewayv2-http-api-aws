@@ -272,29 +272,52 @@ Installed via `make hooks`. Runs on every commit:
 
 ### Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_api"></a> [api](#module\_api) | git::https://github.com/PlatformStackPulse/tf-atom-apigatewayv2-api-aws.git | 61e8dd063cd693e3d26978859c3da4c0e6e2f19d |
+| <a name="module_integration"></a> [integration](#module\_integration) | git::https://github.com/PlatformStackPulse/tf-atom-apigatewayv2-integration-aws.git | dc3912a79d19796cbfae7ba94ce726b1d3231702 |
+| <a name="module_route"></a> [route](#module\_route) | git::https://github.com/PlatformStackPulse/tf-atom-apigatewayv2-route-aws.git | f69353f058af96150a0f07c3423d6f797cf1a4a1 |
+| <a name="module_stage"></a> [stage](#module\_stage) | git::https://github.com/PlatformStackPulse/tf-atom-apigatewayv2-stage-aws.git | 381b2bd5d7744996faaffce0e2f48bc48769c7aa |
 | <a name="module_this"></a> [this](#module\_this) | git::https://github.com/PlatformStackPulse/tf-label.git | v1.0.0 |
 
 ### Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_cloudwatch_log_group.access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_metric_alarm.api_5xx](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_lambda_permission.invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_access_log_group_name"></a> [access\_log\_group\_name](#input\_access\_log\_group\_name) | CloudWatch Logs log group name for API access logs. | `string` | n/a | yes |
+| <a name="input_access_log_format"></a> [access\_log\_format](#input\_access\_log\_format) | Single-line JSON access log format string. | `string` | `"{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"routeKey\":\"$context.routeKey\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\",\"integrationError\":\"$context.integrationErrorMessage\"}"` | no |
+| <a name="input_access_log_retention_days"></a> [access\_log\_retention\_days](#input\_access\_log\_retention\_days) | Retention (days) for the API access log group. | `number` | `30` | no |
+| <a name="input_alarm_actions"></a> [alarm\_actions](#input\_alarm\_actions) | SNS topic ARNs (or other action ARNs) to notify when the 5xx alarm fires. | `list(string)` | `[]` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | ID element. Additional attributes (e.g. `workers` or `cluster`) to add to `id`,<br/>in the order they appear in the list. New attributes are appended to the<br/>end of the list. The elements of the list are joined by the `delimiter`<br/>and treated as a single ID element. | `list(string)` | `[]` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br/>See description of individual variables for details.<br/>Leave string and numeric variables as `null` to use default value.<br/>Individual variable settings (non-null) override settings in context object,<br/>except for attributes and tags, which are merged. | <pre>object({<br/>    enabled             = optional(bool, true)<br/>    namespace           = optional(string, null)<br/>    tenant              = optional(string, null)<br/>    environment         = optional(string, null)<br/>    stage               = optional(string, null)<br/>    name                = optional(string, null)<br/>    delimiter           = optional(string, null)<br/>    attributes          = optional(list(string), [])<br/>    tags                = optional(map(string), {})<br/>    label_order         = optional(list(string), null)<br/>    regex_replace_chars = optional(string, null)<br/>    id_length_limit     = optional(number, null)<br/>    label_key_case      = optional(string, null)<br/>    label_value_case    = optional(string, null)<br/>    labels_as_tags      = optional(set(string), null)<br/>    descriptor_formats = optional(map(object({<br/>      format = string<br/>      labels = list(string)<br/>    })), {})<br/>  })</pre> | `{}` | no |
+| <a name="input_cors_allow_credentials"></a> [cors\_allow\_credentials](#input\_cors\_allow\_credentials) | Whether CORS requests may include credentials. | `bool` | `true` | no |
+| <a name="input_cors_allow_headers"></a> [cors\_allow\_headers](#input\_cors\_allow\_headers) | Allowed CORS request headers. | `list(string)` | <pre>[<br/>  "Content-Type",<br/>  "Authorization",<br/>  "X-CSRF-Token"<br/>]</pre> | no |
+| <a name="input_cors_allow_methods"></a> [cors\_allow\_methods](#input\_cors\_allow\_methods) | Allowed CORS methods. | `list(string)` | <pre>[<br/>  "GET",<br/>  "POST",<br/>  "PUT",<br/>  "DELETE",<br/>  "OPTIONS"<br/>]</pre> | no |
+| <a name="input_cors_allow_origins"></a> [cors\_allow\_origins](#input\_cors\_allow\_origins) | Allowed CORS origins. Must be explicit origins (no wildcard) when credentials are allowed. | `list(string)` | `[]` | no |
+| <a name="input_cors_max_age"></a> [cors\_max\_age](#input\_cors\_max\_age) | CORS preflight cache duration in seconds. | `number` | `3600` | no |
+| <a name="input_create_5xx_alarm"></a> [create\_5xx\_alarm](#input\_create\_5xx\_alarm) | Whether to create a CloudWatch 5xx alarm for the API. | `bool` | `true` | no |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br/>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
+| <a name="input_description"></a> [description](#input\_description) | Description of the HTTP API. | `string` | `null` | no |
 | <a name="input_descriptor_formats"></a> [descriptor\_formats](#input\_descriptor\_formats) | Describe additional descriptors to be output in the `descriptors` output map.<br/>Map of maps. Keys are names of descriptors. Values are maps of the form<br/>`{<br/>   format = string<br/>   labels = list(string)<br/>}`<br/>`format` is a Terraform format string to be passed to the `format()` function.<br/>`labels` is a list of labels, in order, to pass to `format()` function.<br/>Label values will be normalized before being passed to `format()` so they will be<br/>identical to how they appear in `id`.<br/>Default is `{}` (`descriptors` output will be empty). | <pre>map(object({<br/>    format = string<br/>    labels = list(string)<br/>  }))</pre> | `{}` | no |
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | Set to false to prevent the module from creating any resources. | `bool` | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'. | `string` | `null` | no |
+| <a name="input_function_names"></a> [function\_names](#input\_function\_names) | Map of handler key => Lambda function name. One invoke permission is granted per entry. | `map(string)` | `{}` | no |
 | <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br/>Set to `0` for unlimited length.<br/>Set to `null` to keep the existing setting, which defaults to `0`.<br/>Does not affect `id_full`. | `number` | `null` | no |
+| <a name="input_integrations"></a> [integrations](#input\_integrations) | Map of handler key => Lambda invoke ARN. One AWS\_PROXY integration is created per entry. | `map(string)` | `{}` | no |
 | <a name="input_label_key_case"></a> [label\_key\_case](#input\_label\_key\_case) | Controls the letter case of the `tags` keys (label names) for tags generated by this module.<br/>Does not affect keys of tags passed in via the `tags` input.<br/>Possible values: `lower`, `title`, `upper`.<br/>Default value: `title`. | `string` | `null` | no |
 | <a name="input_label_order"></a> [label\_order](#input\_label\_order) | The order in which the labels (ID elements) appear in the `id`.<br/>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br/>You can omit any of the 6 labels ("tenant" is the 6th), but at least one must be present. | `list(string)` | `null` | no |
 | <a name="input_label_value_case"></a> [label\_value\_case](#input\_label\_value\_case) | Controls the letter case of ID elements (labels) as included in `id`,<br/>set as tag values, and output by this module individually.<br/>Does not affect values of tags passed in via the `tags` input.<br/>Possible values: `lower`, `title`, `upper` and `none` (no transformation).<br/>Set this to `title` and set `delimiter` to `""` to yield Pascal Case IDs.<br/>Default value: `lower`. | `string` | `null` | no |
@@ -302,15 +325,23 @@ No resources.
 | <a name="input_name"></a> [name](#input\_name) | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.<br/>This is the only ID element not also included as a `tag`.<br/>The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique. | `string` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br/>Characters matching the regex will be removed from the ID elements.<br/>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
+| <a name="input_routes"></a> [routes](#input\_routes) | Map of route\_key (e.g. "GET /api/health") => handler key (must exist in integrations). | `map(string)` | `{}` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release'. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).<br/>Neither the tag keys nor the tag values will be modified by this module. | `map(string)` | `{}` | no |
 | <a name="input_tenant"></a> [tenant](#input\_tenant) | ID element. A customer identifier, indicating who this instance of a resource is for. | `string` | `null` | no |
+| <a name="input_throttle_burst_limit"></a> [throttle\_burst\_limit](#input\_throttle\_burst\_limit) | Default stage throttling burst limit. | `number` | `200` | no |
+| <a name="input_throttle_rate_limit"></a> [throttle\_rate\_limit](#input\_throttle\_rate\_limit) | Default stage throttling rate limit (requests per second). | `number` | `100` | no |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_enabled"></a> [enabled](#output\_enabled) | Whether the module is enabled. |
+| <a name="output_access_log_group_arn"></a> [access\_log\_group\_arn](#output\_access\_log\_group\_arn) | ARN of the access log group. |
+| <a name="output_api_arn"></a> [api\_arn](#output\_api\_arn) | The HTTP API ARN. |
+| <a name="output_api_endpoint"></a> [api\_endpoint](#output\_api\_endpoint) | The default execute-api endpoint URI. |
+| <a name="output_api_id"></a> [api\_id](#output\_api\_id) | The HTTP API identifier. |
+| <a name="output_execution_arn"></a> [execution\_arn](#output\_execution\_arn) | The API execution ARN (for Lambda permission source ARNs). |
+| <a name="output_stage_invoke_url"></a> [stage\_invoke\_url](#output\_stage\_invoke\_url) | The invoke URL of the default stage. |
 <!-- END_TF_DOCS -->
 
 ## Learning Materials
